@@ -8,7 +8,6 @@ class TodoListTask extends React.Component {
                         <input type="checkbox" checked={this.props.isDone}/>
                         <span>{this.props.title}-{this.props.priority}</span>
                     </div>
-
                 </div>
             </div>
         );
