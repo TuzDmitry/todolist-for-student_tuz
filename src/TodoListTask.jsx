@@ -1,4 +1,7 @@
 import React from "react"
+import PropTypes from 'prop-types';
+
+
 class TodoListTask extends React.Component {
     render = () => {
         return (
@@ -15,3 +18,9 @@ class TodoListTask extends React.Component {
 }
 
 export default TodoListTask;
+
+TodoListTask.propTypes = {
+    isDone: PropTypes.bool,
+    title: PropTypes.string,
+    priority: PropTypes.string
+};

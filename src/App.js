@@ -3,12 +3,13 @@ import './App.css';
 import TodoListHeader from "./TodoListHeader";
 import TodoListTasks from "./TodoListTasks";
 import TodoListFooter from "./TodoListFooter";
+import PropTypes from "prop-types";
 
 class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.newTaskTitleRef= React.createRef();
+        this.newTaskTitleRef = React.createRef(); /////создали ссылку на элемент <input ref={this.newTaskTitleRef}>//
         // setTimeout(() => {
         //         //     let newTask={title: "JS", isDone: true, priority: 'low'};
         //         //     /////...this.state.tasks-- раскукоживаем старый массив
@@ -29,13 +30,13 @@ class App extends React.Component {
         ], filterValue: "Completed"
     }
 
-    onAddTaskClick=()=>{
-        let newText= this.newTaskTitleRef.current.value;
-        let newTask={title: newText, isDone: false, priority: 'low'};
+    onAddTaskClick = () => {
+        let newText = this.newTaskTitleRef.current.value; //обратились к ссылке на эл-т и взяли у нее текущее значение///
+        let newTask = {title: newText, isDone: false, priority: 'low'};
 
-        let newTasks=[...this.state.tasks, newTask]
-        this.setState({tasks:newTasks})
-        this.newTaskTitleRef.current.value="";/////обнуляет наш импут(10)
+        let newTasks = [...this.state.tasks, newTask] ///...this.state.tasks-- раскукоживаем старый массив
+        this.setState({tasks: newTasks}) ///setState- метод реагирующий на изменение св-ва state
+        this.newTaskTitleRef.current.value = "";/////обнуляет наш импут(10)
     }
 
     render = () => {
@@ -47,9 +48,11 @@ class App extends React.Component {
                     <div className="todoList-header">
                         <h3 className="todoList-header__title">What to Learn</h3>
                         <div className="todoList-newTaskForm">
+                            {/* input!! мы привязываем эту ссылку ref={this.newTaskTitleRef} на тебя!!!*/}
                             <input ref={this.newTaskTitleRef}
                                    type="text"
                                    placeholder="New task name"/>
+                            {/*по клику на кнопку произойдет вызов ф-ии onAddTaskClick*/}
                             <button onClick={this.onAddTaskClick}>add</button>
                         </div>
                     </div>
@@ -63,3 +66,6 @@ class App extends React.Component {
 
 export default App;
 
+App.propTypes = {
+    // _________: PropTypes.string
+};
