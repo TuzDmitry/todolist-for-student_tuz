@@ -7,19 +7,6 @@ import PropTypes from "prop-types";
 
 class App extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.newTaskTitleRef = React.createRef(); /////создали ссылку на элемент <input ref={this.newTaskTitleRef}>//
-        // setTimeout(() => {
-        //         //     let newTask={title: "JS", isDone: true, priority: 'low'};
-        //         //     /////...this.state.tasks-- раскукоживаем старый массив
-        //         //     let newTasks=[...this.state.tasks, newTask]
-        //         //     // this.state.tasks.push(newTask)
-        //         //     this.setState({tasks:newTasks})
-        //         // }, 2000);
-    }
-
-
     state = {
         tasks: [
             {title: "JS", isDone: true, priority: 'low'},
@@ -27,37 +14,53 @@ class App extends React.Component {
             {title: "CSS", isDone: true, priority: 'low'},
             {title: "SaSS", isDone: false, priority: 'high'},
             {title: "React", isDone: false, priority: 'low'},
-        ], filterValue: "Completed"
+        ], filterValue: "All"
     }
 
-    onAddTaskClick = () => {
-        let newText = this.newTaskTitleRef.current.value; //обратились к ссылке на эл-т и взяли у нее текущее значение///
-        let newTask = {title: newText, isDone: false, priority: 'low'};
 
+
+    addTask = (newText) => {
+        let newTask = {title: newText, isDone: false, priority: 'low'};
         let newTasks = [...this.state.tasks, newTask] ///...this.state.tasks-- раскукоживаем старый массив
         this.setState({tasks: newTasks}) ///setState- метод реагирующий на изменение св-ва state
-        this.newTaskTitleRef.current.value = "";/////обнуляет наш импут(10)
     }
+
+    changeFilter=(newfilterValue)=>{
+        this.setState({filterValue: newfilterValue});
+        // alert(`Hello ${name}`);
+    }
+
+    changeStatus=(task, isDone)=>{
+        let newTasks = this.state.tasks.map(t=>{
+            if (t!==task){return t}
+            else {return {...t, isDone: isDone}}
+            });
+
+        this.setState({tasks: newTasks});
+    }
+
 
     render = () => {
 
         return (
             <div className="App">
                 <div className="todoList">
-                    {/*<TodoListHeader/>*/}
-                    <div className="todoList-header">
-                        <h3 className="todoList-header__title">What to Learn</h3>
-                        <div className="todoList-newTaskForm">
-                            {/* input!! мы привязываем эту ссылку ref={this.newTaskTitleRef} на тебя!!!*/}
-                            <input ref={this.newTaskTitleRef}
-                                   type="text"
-                                   placeholder="New task name"/>
-                            {/*по клику на кнопку произойдет вызов ф-ии onAddTaskClick*/}
-                            <button onClick={this.onAddTaskClick}>add</button>
-                        </div>
-                    </div>
-                    <TodoListTasks tasks={this.state.tasks}/>
-                    <TodoListFooter filterValue={this.state.filterValue}/>
+                    <TodoListHeader addTask={this.addTask}/>
+                    <TodoListTasks
+                        changeStatus={this.changeStatus}
+                        tasks={this.state.tasks.filter(t=>{
+                        switch (this.state.filterValue) {
+                            case "All":return true;
+                            case "Completed": return t.isDone;
+                            case "Active":return (!t.isDone);
+                            default: return true;
+                        }
+                        // if(this.state.filterValue==="All"){return true}
+                        // if(this.state.filterValue==="Completed"){return t.isDone}
+                        // if(this.state.filterValue==="Active"){return t.isDone===false}
+                    }
+                    )}/>
+                    <TodoListFooter changeFilter={this.changeFilter} filterValue={this.state.filterValue}/>
                 </div>
             </div>
         );
