@@ -12,8 +12,15 @@
 }
 
 .todoList-task {
-
+  opacity: 1;
 }
 .filter-active {background: red;}
 .btn:hover {background: yellow;}
 .btn:active {background: green;}
+.error {
+  border-color: red;
+}
+
+.done {
+  opacity: 0.5;
+}
