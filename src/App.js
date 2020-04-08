@@ -16,28 +16,31 @@ class App extends React.Component {
         tasks: [
             // {id: 1, title: "JS", isDone: true, priority: 'low'},
             // {id: 2, title: "HTML", isDone: true, priority: 'high'},
-            // {id: 3, title: "CSS", isDone: true, priority: 'low'},
-            // {id: 4, title: "SaSS", isDone: false, priority: 'high'},
-            // {id: 5, title: "React", isDone: false, priority: 'low'},
+
         ], filterValue: "All"
     }
-
+///// метод, который будет брать текущий стейт и… сохранять его в localStorage
     saveState = () => {
-        ////джейсон прими наш стейт JSON.stringify(this.state)
+        ////устанавливаем в localStorage под ключом "our-state"  наш стейт переделанный в  джейсон строку JSON.stringify(this.state)
         localStorage.setItem("our-state", JSON.stringify(this.state));
     }
 
     restoreState = () => {
+        ////объявляем наш стейт стартовый
         let state = {
             tasks: [],
             filterValue: "All"
         }
+        //// считываем сохраненную ранее строку из localStorage
         let stateAsString = localStorage.getItem("our-state")
+        ////если таковая есть, то превращаем строку в объект и призваиваем стейту знаение из стораджа.
         if (stateAsString) {
             state = JSON.parse(stateAsString);
         }
-
+////устанавливаем стейт или пустой или востановленный в стейт
         this.setState(state, () => {
+            ////одним махом в колбек сделаем сравнение счётчика для id
+// this.nextTaskId = this.state.tasks.length   код который можено заменить на строчки 44-48
             this.state.tasks.forEach(task => {
                 if (task.id >= this.nextTaskId) {
                     this.nextTaskId = task.id + 1
