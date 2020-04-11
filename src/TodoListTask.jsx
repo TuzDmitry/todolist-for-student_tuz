@@ -14,6 +14,11 @@ class TodoListTask extends React.Component {
         // alert(e.currentTarget.checked);
     }
 
+    onClickClose= ()=>{
+        this.props.deleteTask(this.props.task.id)
+        // alert('hey')
+    }
+
     state = {
         editMode: false
     }
@@ -33,7 +38,7 @@ class TodoListTask extends React.Component {
         let classForIsDone = this.props.task.isDone ? "done" : "todoList-task";
         return (
             <div>
-                <div>
+                <div className="taskContainer">
                     <div className={classForIsDone}>
                         <input type="checkbox" onChange={this.onIsDoneChanged} checked={this.props.task.isDone}/>
 
@@ -49,8 +54,8 @@ class TodoListTask extends React.Component {
 
                         {/*<span onClick={this.activateEditMode}>-{this.props.task.title},</span>*/}
                         <span>priority:{this.props.task.priority}</span>
-
                     </div>
+                    <button onClick={this.onClickClose}>x</button>
                 </div>
             </div>
         );

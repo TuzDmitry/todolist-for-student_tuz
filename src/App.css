@@ -5,6 +5,7 @@
 .todoList {
   width: 500px;
   margin: 0 auto;
+  background-color: #f0ccbc;
 }
 
 .todoList > div {
@@ -23,4 +24,10 @@
 
 .done {
   opacity: 0.5;
+}
+
+.taskContainer{
+  display: flex;
+  justify-content: space-between;
+
 }

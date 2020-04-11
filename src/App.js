@@ -59,6 +59,23 @@ class App extends React.Component {
 
     }
 
+    deleteTask = (taskId) => {
+        ///скопировали массив тасок в новую переменную
+        let newTasks = [...this.state.tasks];
+        ///убираем таску которую хотим удалить
+        newTasks = newTasks.filter(t => t.id !== taskId)
+        ///уменьшили переменную для следующего id
+        this.nextTaskId--;
+        ////переписали массив тасок с актуальными id
+        newTasks = newTasks.map((t, i) => {
+            return {...t, id: i}
+        })
+        this.setState({
+            tasks: newTasks
+        }, this.saveState) ///setState- метод реагирующий на изменение св-ва state
+
+    }
+
     changeFilter = (newfilterValue) => {
         this.setState({filterValue: newfilterValue}, this.saveState);
         // alert(`Hello ${name}`);
@@ -102,6 +119,7 @@ class App extends React.Component {
                 <div className="todoList">
                     <TodoListHeader addTask={this.addTask}/>
                     <TodoListTasks
+                        deleteTask={this.deleteTask}
                         changeTitle={this.changeTitle}
                         changeStatus={this.changeStatus}
                         tasks={this.state.tasks.filter(t => {
