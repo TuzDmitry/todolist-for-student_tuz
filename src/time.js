@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import TodoListHeader from "./TodoListHeader";
+import AddNewItemForm from "./AddNewItemForm";
 import TodoListTasks from "./TodoListTasks";
 import TodoListFooter from "./TodoListFooter";
 
@@ -9,7 +9,7 @@ class App extends React.Component {
         return (
             <div className="App">
                 <div className="todoList">
-                    <TodoListHeader />
+                    <AddNewItemForm />
                     <TodoListTasks />
                     <TodoListFooter />
                 </div>
