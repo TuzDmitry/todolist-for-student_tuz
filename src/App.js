@@ -1,9 +1,12 @@
 import React from 'react';
 import './App.css';
 
+
 import PropTypes from "prop-types";
 import TodoList from "./TodoList";
 import AddNewItemForm from "./AddNewItemForm";
+import {connect} from "react-redux";
+export const ADD_TODOLIST="ADD_TODOLIST"
 
 class App extends React.Component {
     state = {
@@ -11,15 +14,13 @@ class App extends React.Component {
             // {id: "01", title: "Dima"},
             // {id: "02", title: "Victor"},
             // {id: "03", title: "Kolya"},
-            // {id: "04", title: "Valera"},
-            // {id: "05", title: "George"}
         ]
     }
-    componentDidMount=()=> {
+    componentDidMount = () => {
         this.restoreState()
     }
 
-    nextTodoListId=0;
+    nextTodoListId = 0;
 
     saveState = () => {
         ////устанавливаем в localStorage под ключом "our-state"  наш стейт переделанный в  джейсон строку JSON.stringify(this.state)
@@ -28,9 +29,9 @@ class App extends React.Component {
 
     restoreState = () => {
         ////объявляем наш стейт стартовый
-        let state =this.state;
+        let state = this.state;
         //// считываем сохраненную ранее строку из localStorage
-        let stateAsString = localStorage.getItem("todolists")
+        let stateAsString = localStorage.getItem("todolistsХ")
         ////если таковая есть, то превращаем строку в объект и призваиваем стейту знаение из стораджа.
         if (stateAsString) {
             state = JSON.parse(stateAsString);
@@ -49,15 +50,20 @@ class App extends React.Component {
 
     addTodoList = (newTodolistName) => {
         // alert(todolistName)
-        let newTodoList = {title: newTodolistName, id: this.nextTodoListId};
+        let newTodoList = {title: newTodolistName, id: this.props.todolists.length,
+            tasks:[]
+        };
+        debugger
         this.nextTodoListId++;
-        this.setState({todolists:[...this.state.todolists, newTodoList]}, this.saveState)
+        this.props.addTodoList(newTodoList)
+        // this.setState({todolists: [...this.state.todolists, newTodoList]}, this.saveState)
     }
 
 
     render = () => {
-        let todolists = this.state.todolists.map(tl => {
-            return <TodoList key={tl.id} id={tl.id} title={tl.title}/>
+        debugger;
+        let todolists = this.props.todolists.map(tl => {
+            return <TodoList key={tl.id} id={tl.id} title={tl.title} tasks={tl.tasks}/>
         })
         return (
             <>
@@ -75,7 +81,30 @@ class App extends React.Component {
     }
 }
 
-export default App;
+
+const mapStateToProps = (state) => {
+    return {
+        todolists: state.todolists
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addTodoList : (newTodolistName) => {
+            const action = {
+                type: ADD_TODOLIST,
+                newTodolistName: newTodolistName
+            }
+            dispatch(action)
+        }
+    }
+}
+
+
+const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
+
+export default ConnectedApp; ////написали вместо
+// export default App;
 
 // App.propTypes = {
 //     // _________: PropTypes.string
