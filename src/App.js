@@ -6,7 +6,8 @@ import PropTypes from "prop-types";
 import TodoList from "./TodoList";
 import AddNewItemForm from "./AddNewItemForm";
 import {connect} from "react-redux";
-export const ADD_TODOLIST="ADD_TODOLIST"
+
+export const ADD_TODOLIST = "ADD_TODOLIST"
 
 class App extends React.Component {
     state = {
@@ -50,8 +51,9 @@ class App extends React.Component {
 
     addTodoList = (newTodolistName) => {
         // alert(todolistName)
-        let newTodoList = {title: newTodolistName, id: this.props.todolists.length,
-            tasks:[]
+        let newTodoList = {
+            title: newTodolistName, id: this.props.todolists.length,
+            tasks: []
         };
         debugger
         this.nextTodoListId++;
@@ -81,7 +83,6 @@ class App extends React.Component {
     }
 }
 
-
 const mapStateToProps = (state) => {
     return {
         todolists: state.todolists
@@ -90,7 +91,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addTodoList : (newTodolistName) => {
+        addTodoList: (newTodolistName) => {
             const action = {
                 type: ADD_TODOLIST,
                 newTodolistName: newTodolistName

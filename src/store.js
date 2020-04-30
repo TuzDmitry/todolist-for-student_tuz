@@ -2,7 +2,6 @@ import {createStore} from "redux";
 import {ADD_TODOLIST} from "./App";
 import {ADD_TASK, CHANGE_TASK, DELETE_TASK, DELETE_TODOLIST} from "./TodoList";
 
-
 const initialState = {
     todolists: [
         {title: "f0", id: 0, tasks: []},
@@ -12,7 +11,6 @@ const initialState = {
 
     ]
 }
-
 
 const reducer = (state = initialState, action) => {
     debugger
@@ -52,13 +50,13 @@ const reducer = (state = initialState, action) => {
             return {...state, todolists: newTodolists}
         case DELETE_TODOLIST:
 
-            let v=state.todolists.filter(todolist => todolist.id !== action.todolistId)
-            v=v.map((todolist, i)=>{
+            let arrTodoAfterDel = state.todolists.filter(todolist => todolist.id !== action.todolistId)
+            arrTodoAfterDel = arrTodoAfterDel.map((todolist, i) => {
                 return {...todolist, id: i}
             })
             return {
                 ...state,
-                todolists: v
+                todolists: arrTodoAfterDel
             }
         case DELETE_TASK:
             newTodolists = state.todolists.map(todo => {
@@ -66,13 +64,13 @@ const reducer = (state = initialState, action) => {
                 if (todo.id !== action.todolistId) {
                     return todo
                 } else {
-                    let a=[...todo.tasks.filter(taska => taska.id !== action.taskId
+                    let arrTasksAfterDel = [...todo.tasks.filter(taska => taska.id !== action.taskId
                     )];
-                    a = a.map((t, i) => {
+                    arrTasksAfterDel = arrTasksAfterDel.map((t, i) => {
                         return {...t, id: i}
                     })
                     return {
-                        ...todo, tasks: a
+                        ...todo, tasks: arrTasksAfterDel
                     }
                 }
             })

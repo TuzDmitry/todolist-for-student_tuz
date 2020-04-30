@@ -5,13 +5,16 @@
 }
 
 .todoList {
+  border: 2px solid;
   width: 300px;
   margin: 0 auto;
+  margin-right: 20px;
   background-color: #f0ccbc;
 }
 
-.todoList > div {
+.todoList-header {
   padding: 10px;
+  position: relative;
 }
 
 .todoList-task {
@@ -23,13 +26,25 @@
 .error {
   border-color: red;
 }
-
 .done {
   opacity: 0.5;
 }
-
 .taskContainer{
   display: flex;
   justify-content: space-between;
+}
+.deleterTodo{
+  position: absolute;
+top: 5px;
+  right: 5px;
+}
 
+.idTodo {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.deleterTask{
+  margin-right: 5px;
 }

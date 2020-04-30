@@ -9,8 +9,8 @@ import {connect} from "react-redux";
 
 export const DELETE_TODOLIST = "DELETE-TODOLIST";
 export const DELETE_TASK = "DELETE-TASK";
-export const ADD_TASK="ADD_TASK"
-export const CHANGE_TASK="CHANGE_TASK"
+export const ADD_TASK = "ADD_TASK"
+export const CHANGE_TASK = "CHANGE_TASK"
 
 
 class TodoList extends React.Component {
@@ -59,7 +59,7 @@ class TodoList extends React.Component {
 
     addTask = (newText) => {
         debugger
-        let newTask = {id:this.props.tasks.length, title: newText, isDone: false, priority: 'low'};
+        let newTask = {id: this.props.tasks.length, title: newText, isDone: false, priority: 'low'};
         this.nextTaskId++;
         this.props.addTask(this.props.id, newTask)
         // let newTasks = [...this.state.tasks, newTask] ///...this.state.tasks-- раскукоживаем старый массив
@@ -68,7 +68,7 @@ class TodoList extends React.Component {
         // }, this.saveState) ///setState- метод реагирующий на изменение св-ва state
 
     }
-
+////////мой метод удаления таски
     deletTask = (taskId) => {
         ///скопировали массив тасок в новую переменную
         let newTasks = [...this.state.tasks];
@@ -88,10 +88,8 @@ class TodoList extends React.Component {
 
     deleteTask = (taskId) => {
         // alert(taskId)
-        this.props.deleteTask(this.props.id , taskId)
+        this.props.deleteTask(this.props.id, taskId)
     }
-
-    // deleteTask = (taskId) => {}
 
     deleteTodolist = () => {
         this.props.deleteTodolist(this.props.id)
@@ -136,15 +134,14 @@ class TodoList extends React.Component {
 
 
     render = () => {
-        // const {tasks: []} = this.props
         return (
             <div className="App">
                 <div className="todoList">
                     <div className="todoList-header">
+                        <TodoListTitle title={this.props.title}/>
                         <div>
-                            <TodoListTitle title={this.props.title}/>
-                            <div>{this.props.id}</div>
-                            <button onClick={this.deleteTodolist}>HYI</button>
+                            <span className="idTodo">{`# ${this.props.id}`}</span>
+                            <button className="deleterTodo" onClick={this.deleteTodolist}>x</button>
                         </div>
                         <AddNewItemForm addItem={this.addTask}/>
                     </div>
@@ -213,11 +210,11 @@ const mapDispatchToProps = (dispatch) => {
             // debugger
             dispatch(action)
         },
-        deleteTask: (todolistId, taskId)=>{
+        deleteTask: (todolistId, taskId) => {
             //передали номер ЛИста и номер таски
             // alert(`listID -${todolistId}. taskId ${taskId}`)
-            const action={
-                type:DELETE_TASK,
+            const action = {
+                type: DELETE_TASK,
                 todolistId: todolistId,
                 taskId: taskId
             }

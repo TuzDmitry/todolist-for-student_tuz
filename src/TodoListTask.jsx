@@ -1,7 +1,6 @@
 import React from "react"
 import PropTypes from 'prop-types';
 
-
 class TodoListTask extends React.Component {
 
     onIsDoneChanged = (e) => {
@@ -33,7 +32,6 @@ class TodoListTask extends React.Component {
         })
     }
 
-
     render = () => {
         let classForIsDone = this.props.task.isDone ? "done" : "todoList-task";
         return (
@@ -55,7 +53,7 @@ class TodoListTask extends React.Component {
                         {/*<span onClick={this.activateEditMode}>-{this.props.task.title},</span>*/}
                         <span>priority:{this.props.task.priority}</span>
                     </div>
-                    <button onClick={this.onClickClose}>x</button>
+                    <button className="deleterTask" onClick={this.onClickClose}>x</button>
                 </div>
             </div>
         );
