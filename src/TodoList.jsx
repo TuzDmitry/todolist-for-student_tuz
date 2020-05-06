@@ -6,11 +6,17 @@ import TodoListFooter from "./TodoListFooter";
 import PropTypes from "prop-types";
 import TodoListTitle from "./TodoListTitle";
 import {connect} from "react-redux";
+import {
+    ADD_TASK,
+    addTaskAC,
+    CHANGE_TASK,
+    changeTaskAC,
+    DELETE_TASK,
+    DELETE_TODOLIST, deleteTaskAC,
+    deleteTodolistAC
+} from "./reducer";
 
-export const DELETE_TODOLIST = "DELETE-TODOLIST";
-export const DELETE_TASK = "DELETE-TASK";
-export const ADD_TASK = "ADD_TASK"
-export const CHANGE_TASK = "CHANGE_TASK"
+
 
 
 class TodoList extends React.Component {
@@ -183,41 +189,21 @@ class TodoList extends React.Component {
 const mapDispatchToProps = (dispatch) => {
     return {
         addTask: (todolistId, newTask) => {
-            const action = {
-                type: ADD_TASK,
-                todolistId: todolistId,
-                newTask: newTask
-            }
-            debugger
+            const action = addTaskAC(todolistId, newTask)
             dispatch(action)
         },
         changeTask: (todolistId, taskId, newPropsObj) => {
-            const action = {
-                type: CHANGE_TASK,
-                todolistId: todolistId,
-                taskId: taskId,
-                newPropsObj: newPropsObj
-
-            }
-            // debugger
+            const action = changeTaskAC(todolistId, taskId, newPropsObj)
             dispatch(action)
         },
         deleteTodolist: (todolistId) => {
-            const action = {
-                type: DELETE_TODOLIST,
-                todolistId: todolistId
-            }
-            // debugger
+            const action = deleteTodolistAC(todolistId)
             dispatch(action)
         },
         deleteTask: (todolistId, taskId) => {
             //передали номер ЛИста и номер таски
             // alert(`listID -${todolistId}. taskId ${taskId}`)
-            const action = {
-                type: DELETE_TASK,
-                todolistId: todolistId,
-                taskId: taskId
-            }
+            const action = deleteTaskAC(todolistId, taskId)
             dispatch(action)
         }
     }

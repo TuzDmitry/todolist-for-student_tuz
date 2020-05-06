@@ -6,8 +6,9 @@ import PropTypes from "prop-types";
 import TodoList from "./TodoList";
 import AddNewItemForm from "./AddNewItemForm";
 import {connect} from "react-redux";
+import {ADD_TODOLIST, addTodoListAC} from "./reducer";
 
-export const ADD_TODOLIST = "ADD_TODOLIST"
+
 
 class App extends React.Component {
     state = {
@@ -92,10 +93,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         addTodoList: (newTodolistName) => {
-            const action = {
-                type: ADD_TODOLIST,
-                newTodolistName: newTodolistName
-            }
+            const action = addTodoListAC(newTodolistName)
             dispatch(action)
         }
     }
