@@ -4,8 +4,6 @@ import PropTypes from "prop-types";
 class AddNewItemForm extends React.Component {
     constructor(props) {
         super(props);
-        // this.newTaskTitleRef = React.createRef(); //////////уже нам не нужен
-        /////создали ссылку на элемент <input ref={this.newTaskTitleRef}>//
     }
 
     state = {

@@ -3,26 +3,67 @@ export const DELETE_TODOLIST = "TodoList/Reducer/DELETE-TODOLIST";
 export const DELETE_TASK = "TodoList/Reducer/DELETE-TASK";
 export const ADD_TASK = "TodoList/Reducer/ADD_TASK"
 export const CHANGE_TASK = "TodoList/Reducer/CHANGE_TASK"
+export const SET_TODOLISTS = 'SET_TODOLISTS'
+export const SET_TASKS = 'SET_TASKS'
+
 
 const initialState = {
     todolists: [
-        {title: "f0", id: 0, tasks: []},
-        {title: "f1", id: 1, tasks: []},
-        // {title: "f2", id: 2, tasks: []},
-        // {title: "f3", id: 3, tasks: []},
+        // {addedDate: "2020", id: "e75b1dca-1c11-4eb2-bca2-10cd270017a2", order: -4, title: "ewww"}
 
     ]
 }
 
 
 export const reducer = (state = initialState, action) => {
-    debugger
+
     let newTodolists;
     switch (action.type) {
+
+///////////////+++++++++
+        case SET_TODOLISTS:
+            // debugger
+            return {...state, todolists: action.todolists}
+
+
         case ADD_TODOLIST:
+            debugger
+
             newTodolists = [...state.todolists, action.newTodolistName]
             return {...state, todolists: newTodolists}
+
+        case DELETE_TODOLIST:
+
+            let arrTodoAfterDel = state.todolists.filter(todolist => todolist.id !== action.todolistId)
+            arrTodoAfterDel = arrTodoAfterDel.map((todolist) => {
+                return {...todolist}
+            })
+            return {
+                ...state,
+                todolists: arrTodoAfterDel
+            }
+
+
+///////////////////++++++++++
+        case SET_TASKS:
+            debugger
+            let q={
+                ...state,
+                todolists: state.todolists.map(todo => {
+                    if (todo.id != action.todoListId) {
+                        return todo
+                    } else {
+                        return {...todo, tasks: action.tasks}
+                    }
+                })
+            }
+            console.log(q)
+            return q;
+
+
+///////////////////++++++++++
         case ADD_TASK:
+
             newTodolists = state.todolists.map(todo => {
                 if (todo.id !== action.todolistId) {
                     return todo
@@ -51,16 +92,9 @@ export const reducer = (state = initialState, action) => {
             })
             debugger
             return {...state, todolists: newTodolists}
-        case DELETE_TODOLIST:
 
-            let arrTodoAfterDel = state.todolists.filter(todolist => todolist.id !== action.todolistId)
-            arrTodoAfterDel = arrTodoAfterDel.map((todolist, i) => {
-                return {...todolist, id: i}
-            })
-            return {
-                ...state,
-                todolists: arrTodoAfterDel
-            }
+
+
         case DELETE_TASK:
             newTodolists = state.todolists.map(todo => {
                 debugger
@@ -69,9 +103,9 @@ export const reducer = (state = initialState, action) => {
                 } else {
                     let arrTasksAfterDel = [...todo.tasks.filter(taska => taska.id !== action.taskId
                     )];
-                    arrTasksAfterDel = arrTasksAfterDel.map((t, i) => {
-                        return {...t, id: i}
-                    })
+                    // arrTasksAfterDel = arrTasksAfterDel.map((t, i) => {
+                    //     return {...t, id: i}
+                    // })
                     return {
                         ...todo, tasks: arrTasksAfterDel
                     }
@@ -117,6 +151,27 @@ export const deleteTaskAC = (todolistId, taskId) => {
         }
     )
 }
+
+
+export const setTodoListsAC = (todolists) => {
+    return (
+        {
+            type: SET_TODOLISTS,
+            todolists
+        }
+    )
+}
+
+export const setTasksAC = (tasks, todoListId) => {
+    return (
+        {
+            type: SET_TASKS,
+            tasks,
+            todoListId
+        }
+    )
+}
+
 
 // export const setStateFromLocalStorageAC=()=>{
 //     localStorage
