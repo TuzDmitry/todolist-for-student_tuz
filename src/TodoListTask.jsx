@@ -4,55 +4,109 @@ import PropTypes from 'prop-types';
 class TodoListTask extends React.Component {
 
     onIsDoneChanged = (e) => {
-        this.props.changeStatus(this.props.task.id, e.currentTarget.checked)
+
+        let status = e.currentTarget.checked ? 2 : 0
+
+        this.props.changeStatus(this.props.task, status)
+// debugger
         // alert(e.currentTarget.checked);
     }
 
     onTitleChanged = (e) => {
-        this.props.changeTitle(this.props.task.id, e.currentTarget.value)
-        // alert(e.currentTarget.checked);
+        this.setState({
+            memoryTitle: e.currentTarget.value
+        })
     }
 
-    onClickClose= ()=>{
+    onClickClose = () => {
         this.props.deleteTask(this.props.task.id)
         // alert('hey')
     }
 
     state = {
-        editMode: false
+        editMode: false,
+        memoryTitle: '',
+        editPriorityMode: false
     }
     activateEditMode = () => {
         this.setState({
-            editMode: true
+            editMode: true,
+            memoryTitle: this.props.task.title
         })
     }
     deActivateEditMode = () => {
+        debugger
+        this.props.changeTitle(this.props.task, this.state.memoryTitle)
         this.setState({
             editMode: false
         })
     }
+    onPriorityChanged = (e) => {
+        let value = e.currentTarget.value;
+        this.props.changePriority(this.props.task, value)
+    }
+
 
     render = () => {
-        let statusTasks=this.props.task.status
-        let classForIsDone = statusTasks===2 ? "done" : "todoList-task";
+        let statusTasks = this.props.task.status
+        let classForIsDone = statusTasks === 2 ? "done" : "todoList-task";
+        let priora;
+        debugger
+        switch (this.props.task.priority) {
+            case 0:
+                priora = 'low'
+                break
+            case 1:
+                priora = 'middle'
+                break
+            case 2:
+                priora = 'hi'
+                break
+            case 3:
+                priora = 'urgently'
+                break
+            case 4:
+                priora = 'later'
+                break
+            default:
+                priora = 'hyi'
+        }
+
         return (
             <div>
                 <div className="taskContainer">
                     <div className={classForIsDone}>
-                        <input type="checkbox" onChange={this.onIsDoneChanged} checked={statusTasks===2}/>
+                        <span>{this.props.task.id.slice(0,4)}</span>
+                        <input type="checkbox" onChange={this.onIsDoneChanged} checked={statusTasks === 2}/>
 
-                        <span>{this.props.task.id}</span>
+                        {/*<div>{this.props.task.id}</div>*/}
                         {
                             this.state.editMode
                                 ? <input onBlur={this.deActivateEditMode}
                                          onChange={this.onTitleChanged}
-                                         value={this.props.task.title}
+                                         value={this.state.memoryTitle}
                                          autoFocus={true}/>
-                                : <span onClick={this.activateEditMode}>-{this.props.task.title},</span>
+                                : <span onClick={this.activateEditMode}>-{this.props.task.title}, </span>
                         }
 
-                        {/*<span onClick={this.activateEditMode}>-{this.props.task.title},</span>*/}
-                        <span>priority:{this.props.task.priority}</span>
+                        <span>priority:
+                            {
+                                this.state.editPriorityMode
+                                    ? <select size="1"
+                                              onBlur={() => this.setState({editPriorityMode: false})}
+                                              onChange={this.onPriorityChanged}>
+                                        <option>low</option>
+                                        <option>medium</option>
+                                        <option>hi</option>
+                                        <option>urgently</option>
+                                        <option>later</option>
+                                    </select>
+
+                                    : <span onClick={() => this.setState({editPriorityMode: true})}>
+                                        {priora}
+                                    </span>
+                            }
+                        </span>
                     </div>
                     <button className="deleterTask" onClick={this.onClickClose}>x</button>
                 </div>

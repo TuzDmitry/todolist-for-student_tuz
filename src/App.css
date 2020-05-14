@@ -30,8 +30,10 @@
   opacity: 0.5;
 }
 .taskContainer{
+  border-bottom: 2px dashed;
   display: flex;
   justify-content: space-between;
+margin-bottom: 15px;
 }
 .deleterTodo{
   position: absolute;
