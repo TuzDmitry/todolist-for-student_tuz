@@ -8,6 +8,7 @@ import AddNewItemForm from "./AddNewItemForm";
 import {connect} from "react-redux";
 import {addTodoListAC, setTodoListsAC} from "./reducer";
 import axios from 'axios'
+import api from "./api";
 
 
 class App extends React.Component {
@@ -24,12 +25,14 @@ class App extends React.Component {
 
 
     restoreState = () => {
-        debugger
-        axios.get("https://social-network.samuraijs.com/api/1.1/todo-lists", {withCredentials: true})
+        api.getTodolists(this.props.id)
+        // debugger
+        // axios.get("https://social-network.samuraijs.com/api/1.1/todo-lists", {withCredentials: true})
             .then(res => {
                 this.props.setTodolists(res.data)
                 console.log(res.data);
             });
+
     }
 
     nextTodoListId = 0;
@@ -61,14 +64,15 @@ class App extends React.Component {
 //     }
 
     addTodoList = (newTodolistName) => {
-        axios.post(
-            'https://social-network.samuraijs.com/api/1.1/todo-lists',
-            {title: newTodolistName},
-            {
-                withCredentials: true,
-                headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
-            }
-        )
+        // axios.post(
+        //     'https://social-network.samuraijs.com/api/1.1/todo-lists',
+        //     {title: newTodolistName},
+        //     {
+        //         withCredentials: true,
+        //         headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
+        //     }
+        // )
+            api.createTodolist(newTodolistName)
             .then(response => {
                 if (response.data.resultCode === 0) {
                     // debugger

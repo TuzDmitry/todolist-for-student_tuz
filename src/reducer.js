@@ -80,7 +80,7 @@ export const reducer = (state = initialState, action) => {
 
 ///////////////////++++++++++
         case ADD_TASK:
-
+debugger
             newTodolists = state.todolists.map(todo => {
                 if (todo.id !== action.todolistId) {
                     return todo
@@ -108,7 +108,7 @@ export const reducer = (state = initialState, action) => {
                     }
                 }
             })
-            debugger
+            // debugger
             return {...state, todolists: newTodolists}
 
 

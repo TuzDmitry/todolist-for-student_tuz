@@ -16,6 +16,7 @@ import {
     deleteTodolistAC,
     setTasksAC
 } from "./reducer";
+import api from "./api";
 
 
 class TodoList extends React.Component {
@@ -35,13 +36,15 @@ class TodoList extends React.Component {
 
     restoreState = () => {
         // debugger
-        axios.get(
-            `https://social-network.samuraijs.com/api/1.1/todo-lists/${this.props.id}/tasks`,
-            {
-                withCredentials: true,
-                headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
-            }
-        ).then(response => {
+        // axios.get(
+        //     `https://social-network.samuraijs.com/api/1.1/todo-lists/${this.props.id}/tasks`,
+        //     {
+        //         withCredentials: true,
+        //         headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
+        //     }
+        // )
+        api.getTasks(this.props.id)
+            .then(response => {
             console.log(response)
             // debugger
             if (!response.data.error) {
@@ -83,13 +86,14 @@ class TodoList extends React.Component {
 
     deleteTodolist = () => {
 
-        axios.delete(
-            `https://social-network.samuraijs.com/api/1.1/todo-lists/${this.props.id}`,
-            {
-                withCredentials: true,
-                headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
-            }
-        )
+        // axios.delete(
+        //     `https://social-network.samuraijs.com/api/1.1/todo-lists/${this.props.id}`,
+        //     {
+        //         withCredentials: true,
+        //         headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
+        //     }
+        // )
+        api.deleteTodolist(this.props.id)
             .then(response => {
                 // console.log(response)
                 if (response.data.resultCode === 0) {
@@ -102,14 +106,17 @@ class TodoList extends React.Component {
     }
 
     addTask = (newText) => {
-
-        axios.post(`https://social-network.samuraijs.com/api/1.1/todo-lists/${this.props.id}/tasks`,
-            {title: newText},
-            {
-                withCredentials: true,
-                headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
-            }
-        ).then(response => {
+debugger
+        // axios.post(`https://social-network.samuraijs.com/api/1.1/todo-lists/${this.props.id}/tasks`,
+        //     {title: newText},
+        //     {
+        //         withCredentials: true,
+        //         headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
+        //     }
+        // )
+        api.createTask(this.props.id, newText)
+            .then(response => {
+                debugger
             if (response.data.resultCode === 0) {
                 let newTask = response.data.data.item;
                 this.props.addTask(this.props.id, newTask)
@@ -126,11 +133,13 @@ class TodoList extends React.Component {
 
     deleteTask = (taskId) => {
 
-        axios.delete(`https://social-network.samuraijs.com/api/1.1/todo-lists/${this.props.id}/tasks/${taskId}`,
-            {
-                withCredentials: true,
-                headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
-            })
+        // axios.delete(`https://social-network.samuraijs.com/api/1.1/todo-lists/${this.props.id}/tasks/${taskId}`,
+        //     {
+        //         withCredentials: true,
+        //         headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
+        //     })
+
+        api.deleteTask(this.props.id,taskId)
             .then(response => {
                 // debugger
                 if (response.data.resultCode === 0) {
@@ -168,17 +177,20 @@ class TodoList extends React.Component {
     // }
 
     changeTask = (task, newPropsObj) => {
-        axios.put(
-            `https://social-network.samuraijs.com/api/1.1/todo-lists/${this.props.id}/tasks/${task.id}`,
-            {...task, ...newPropsObj},
-            {
-                withCredentials: true,
-                headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
-            }
-            )
+        // axios.put(
+        //     `https://social-network.samuraijs.com/api/1.1/todo-lists/${this.props.id}/tasks/${task.id}`,
+        //     {...task, ...newPropsObj},
+        //     {
+        //         withCredentials: true,
+        //         headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
+        //     }
+        //     )
+        // this.props.tasks.forEach(task=)
+        api. changeTask(task,newPropsObj)
             .then(response=>{
             if (response.data.resultCode === 0) {
                 // debugger
+                // this.props.changeTask(response.data.data.item)
                 this.props.changeTask(response.data.data.item)
             }
         })

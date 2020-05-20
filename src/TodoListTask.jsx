@@ -35,7 +35,7 @@ class TodoListTask extends React.Component {
         })
     }
     deActivateEditMode = () => {
-        debugger
+        // debugger
         this.props.changeTitle(this.props.task, this.state.memoryTitle)
         this.setState({
             editMode: false
@@ -51,7 +51,6 @@ class TodoListTask extends React.Component {
         let statusTasks = this.props.task.status
         let classForIsDone = statusTasks === 2 ? "done" : "todoList-task";
         let priora;
-        debugger
         switch (this.props.task.priority) {
             case 0:
                 priora = 'low'
