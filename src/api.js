@@ -40,6 +40,13 @@ const api = {
     deleteTask(todolistId,taskId){
         return instance.delete(`${todolistId}/tasks/${taskId}`
             )
+    },
+
+    changeTodoTitle(todolistId, newtitle){
+        return instance.put(
+            `${todolistId}`,
+            {title:newtitle}
+        )
     }
 
 

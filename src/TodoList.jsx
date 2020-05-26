@@ -11,7 +11,7 @@ import axios from 'axios';
 
 import {
     addTaskAC,
-    changeTaskAC,
+    changeTaskAC, changeTodolistAC,
     deleteTaskAC,
     deleteTodolistAC,
     setTasksAC
@@ -45,12 +45,12 @@ class TodoList extends React.Component {
         // )
         api.getTasks(this.props.id)
             .then(response => {
-            console.log(response)
-            // debugger
-            if (!response.data.error) {
-                this.props.setTasks(response.data.items, this.props.id)
-            }
-        })
+                console.log(response)
+                // debugger
+                if (!response.data.error) {
+                    this.props.setTasks(response.data.items, this.props.id)
+                }
+            })
     }
 
 
@@ -106,7 +106,7 @@ class TodoList extends React.Component {
     }
 
     addTask = (newText) => {
-debugger
+        debugger
         // axios.post(`https://social-network.samuraijs.com/api/1.1/todo-lists/${this.props.id}/tasks`,
         //     {title: newText},
         //     {
@@ -117,11 +117,11 @@ debugger
         api.createTask(this.props.id, newText)
             .then(response => {
                 debugger
-            if (response.data.resultCode === 0) {
-                let newTask = response.data.data.item;
-                this.props.addTask(this.props.id, newTask)
-            }
-        })
+                if (response.data.resultCode === 0) {
+                    let newTask = response.data.data.item;
+                    this.props.addTask(this.props.id, newTask)
+                }
+            })
 
         //////было...
         // let newTask = {id: this.props.tasks.length, title: newText, isDone: false, priority: 'low'};
@@ -139,7 +139,7 @@ debugger
         //         headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
         //     })
 
-        api.deleteTask(this.props.id,taskId)
+        api.deleteTask(this.props.id, taskId)
             .then(response => {
                 // debugger
                 if (response.data.resultCode === 0) {
@@ -186,14 +186,14 @@ debugger
         //     }
         //     )
         // this.props.tasks.forEach(task=)
-        api. changeTask(task,newPropsObj)
-            .then(response=>{
-            if (response.data.resultCode === 0) {
-                // debugger
-                // this.props.changeTask(response.data.data.item)
-                this.props.changeTask(response.data.data.item)
-            }
-        })
+        api.changeTask(task, newPropsObj)
+            .then(response => {
+                if (response.data.resultCode === 0) {
+                    // debugger
+                    // this.props.changeTask(response.data.data.item)
+                    this.props.changeTask(response.data.data.item)
+                }
+            })
     }
 
     changeStatus = (task, status) => {
@@ -211,7 +211,19 @@ debugger
     }
 
 
+    changeTodoTitle = (todolistId, newtitle) => {
+        // axios.put(
+        //     `https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}`,
+        //     {title:newtitle},
+        //     {
+        //         withCredentials: true,
+        //         headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
+        //     }
+        //     )
+        api.changeTodoTitle(todolistId, newtitle)
+            .then(this.props.changeTodoTitle(todolistId, newtitle))
 
+    }
 
 
     render = () => {
@@ -222,9 +234,11 @@ debugger
             <div className="App">
                 <div className="todoList">
                     <div className="todoList-header">
-                        <TodoListTitle title={this.props.title}/>
+                        <TodoListTitle title={this.props.title}
+                                       id={this.props.id}
+                                       changeTodoTitle={this.changeTodoTitle}/>
                         <div>
-                            <span className="idTodo">{`# ${this.props.id.slice(0,4)}`}</span>
+                            <span className="idTodo">{`# ${this.props.id.slice(0, 4)}`}</span>
                             <button className="deleterTodo" onClick={this.deleteTodolist}>x</button>
                         </div>
                         <AddNewItemForm addItem={this.addTask}/>
@@ -264,6 +278,11 @@ const mapDispatchToProps = (dispatch) => {
             const action = deleteTodolistAC(todolistId)
             dispatch(action)
         },
+        changeTodoTitle: (todolistId, newtitle) => {
+            const action = changeTodolistAC(todolistId, newtitle)
+            dispatch(action)
+        },
+
         addTask: (todolistId, newTask) => {
             const action = addTaskAC(todolistId, newTask)
             dispatch(action)

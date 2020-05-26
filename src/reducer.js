@@ -5,6 +5,7 @@ export const ADD_TASK = "TodoList/Reducer/ADD_TASK"
 export const CHANGE_TASK = "TodoList/Reducer/CHANGE_TASK"
 export const SET_TODOLISTS = 'SET_TODOLISTS'
 export const SET_TASKS = 'SET_TASKS'
+export const CHANGE_TODOLIST = 'TodoList/Reducer/CHANGE_TODOLIST'
 
 
 const initialState = {
@@ -130,6 +131,16 @@ debugger
             })
             return {...state, todolists: newTodolists}
 
+        case CHANGE_TODOLIST:
+            debugger
+            newTodolists = state.todolists.map(todo => {
+                if (todo.id !== action.todolistId) {
+                    return todo
+                } else {
+                    return {...todo, title: action.title}
+                }
+            })
+            return {...state, todolists: newTodolists}
 
         default:
             return state
@@ -159,6 +170,17 @@ export const deleteTodolistAC = (todolistId) => {
         }
     )
 }
+
+export const changeTodolistAC=(todoId, newtitle) => {
+    return (
+        {
+            type: CHANGE_TODOLIST,
+            todolistId: todoId,
+            title:newtitle
+        }
+    )
+}
+
 
 export const deleteTaskAC = (todolistId, taskId) => {
     return (
