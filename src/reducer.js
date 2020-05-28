@@ -1,3 +1,5 @@
+import api from "./api";
+
 export const ADD_TODOLIST = "TodoList/Reducer/ADD_TODOLIST"
 export const DELETE_TODOLIST = "TodoList/Reducer/DELETE-TODOLIST";
 export const DELETE_TASK = "TodoList/Reducer/DELETE-TASK";
@@ -6,6 +8,8 @@ export const CHANGE_TASK = "TodoList/Reducer/CHANGE_TASK"
 export const SET_TODOLISTS = 'SET_TODOLISTS'
 export const SET_TASKS = 'SET_TASKS'
 export const CHANGE_TODOLIST = 'TodoList/Reducer/CHANGE_TODOLIST'
+export const CHANGE_PRELOADER_TODO = 'TodoList/Reducer/CHANGE_PRELOADER_TODO'
+export const CHANGE_PRELOADER_TASKS = 'TodoList/Reducer/CHANGE_PRELOADER_TASKS'
 
 
 const initialState = {
@@ -29,7 +33,10 @@ const initialState = {
         //     }]
         // }
 
-    ]
+    ],
+    isPreloaderTodo: false,
+    isPreloaderTasks: false
+
 }
 
 
@@ -47,7 +54,7 @@ export const reducer = (state = initialState, action) => {
         case ADD_TODOLIST:
             debugger
 
-            newTodolists = [...state.todolists, action.newTodolistName]
+            newTodolists = [action.newTodolistName, ...state.todolists]
             return {...state, todolists: newTodolists}
 
         case DELETE_TODOLIST:
@@ -81,7 +88,7 @@ export const reducer = (state = initialState, action) => {
 
 ///////////////////++++++++++
         case ADD_TASK:
-debugger
+            debugger
             newTodolists = state.todolists.map(todo => {
                 if (todo.id !== action.todolistId) {
                     return todo
@@ -142,12 +149,22 @@ debugger
             })
             return {...state, todolists: newTodolists}
 
+        case CHANGE_PRELOADER_TODO:
+            return {...state, isPreloaderTodo: action.isPreloader}
+
+        case CHANGE_PRELOADER_TASKS:
+            return {...state, isPreloaderTasks: action.isPreloader}
+
         default:
             return state
 
     }
 }
 
+
+export const changePreloaderTodoAC = (isPreloader) => ({type: CHANGE_PRELOADER_TODO, isPreloader})
+
+export const changePreloaderTasksAC = (isPreloader) => ({type: CHANGE_PRELOADER_TASKS, isPreloader})
 
 export const addTodoListAC = (newTodolistName) => ({type: ADD_TODOLIST, newTodolistName: newTodolistName})
 
@@ -171,12 +188,12 @@ export const deleteTodolistAC = (todolistId) => {
     )
 }
 
-export const changeTodolistAC=(todoId, newtitle) => {
+export const changeTodolistAC = (todoId, newtitle) => {
     return (
         {
             type: CHANGE_TODOLIST,
             todolistId: todoId,
-            title:newtitle
+            title: newtitle
         }
     )
 }
@@ -210,6 +227,103 @@ export const setTasksAC = (tasks, todoListId) => {
             todoListId
         }
     )
+}
+
+/////THUNKS
+export const getTodolistsTC = () => {
+    return (dispatch) => {
+        dispatch(changePreloaderTodoAC(true))
+        api.getTodolists()
+            .then(res => {
+                dispatch(setTodoListsAC(res.data))
+                dispatch(changePreloaderTodoAC(false))
+                // console.log(res.data);
+            });
+    }
+}
+
+export const addTodoListTC = (newTodolistName) => {
+    return (dispatch) => {
+        api.createTodolist(newTodolistName)
+            .then(response => {
+                if (response.data.resultCode === 0) {
+                    // debugger
+                    dispatch(addTodoListAC(response.data.data.item))
+                }
+            })
+    }
+}
+
+export const getTasksTC = (todoListId) => {
+    return (dispatch) => {
+        dispatch(changePreloaderTasksAC(true))
+        api.getTasks(todoListId)
+            .then(response => {
+                console.log(response)
+                // debugger
+                if (!response.data.error) {
+                    dispatch(setTasksAC(response.data.items, todoListId))
+                    dispatch(changePreloaderTasksAC(false))
+                }
+            })
+    }
+}
+
+export const deleteTodolistTC = (todoListId) => {
+    return (dispatch) => {
+        api.deleteTodolist(todoListId)
+            .then(response => {
+                if (response.data.resultCode === 0) {
+                    // debugger
+                    dispatch(deleteTodolistAC(todoListId))
+                }
+            })
+    }
+}
+
+export const addTaskTC = (todoListId, newText) => {
+    return (dispatch) => {
+        api.createTask(todoListId, newText)
+            .then(response => {
+                debugger
+                if (response.data.resultCode === 0) {
+                    let newTask = response.data.data.item;
+                    dispatch(addTaskAC(todoListId, newTask))
+                }
+            })
+    }
+}
+
+export const deleteTaskTC = (todoListId, taskId) => {
+    return (dispatch) => {
+        api.deleteTask(todoListId, taskId)
+            .then(response => {
+                // debugger
+                if (response.data.resultCode === 0) {
+                    dispatch(deleteTaskAC(todoListId, taskId))
+                }
+            })
+    }
+}
+
+export const changeTodolistTC = (todoListId, newtitle) => {
+    return (dispatch) => {
+        api.changeTodoTitle(todoListId, newtitle)
+            .then(
+                dispatch(changeTodolistAC(todoListId, newtitle))
+            )
+    }
+}
+
+export const changeTaskTC = (task, newPropsObj) => {
+    return (dispatch) => {
+        api.changeTask(task, newPropsObj)
+            .then(response => {
+                if (response.data.resultCode === 0) {
+                    dispatch(changeTaskAC(response.data.data.item))
+                }
+            })
+    }
 }
 
 

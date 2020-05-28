@@ -6,9 +6,10 @@ import PropTypes from "prop-types";
 import TodoList from "./TodoList";
 import AddNewItemForm from "./AddNewItemForm";
 import {connect} from "react-redux";
-import {addTodoListAC, setTodoListsAC} from "./reducer";
-import axios from 'axios'
+import {addTodoListAC, addTodoListTC, getTodolistsTC, setTodoListsAC} from "./reducer";
+// import axios from 'axios'
 import api from "./api";
+import Preloader from "./Preloader";
 
 
 class App extends React.Component {
@@ -25,13 +26,13 @@ class App extends React.Component {
 
 
     restoreState = () => {
-        api.getTodolists(this.props.id)
-        // debugger
-        // axios.get("https://social-network.samuraijs.com/api/1.1/todo-lists", {withCredentials: true})
-            .then(res => {
-                this.props.setTodolists(res.data)
-                console.log(res.data);
-            });
+
+        this.props.getTodolists()
+        // api.getTodolists(this.props.id)
+        //     .then(res => {
+        //         this.props.setTodolists(res.data)
+        //         console.log(res.data);
+        //     });
 
     }
 
@@ -64,6 +65,7 @@ class App extends React.Component {
 //     }
 
     addTodoList = (newTodolistName) => {
+        this.props.addTodoList(newTodolistName)
         // axios.post(
         //     'https://social-network.samuraijs.com/api/1.1/todo-lists',
         //     {title: newTodolistName},
@@ -72,20 +74,13 @@ class App extends React.Component {
         //         headers: {"API-KEY": "99d1b1eb-87ca-41b0-b4eb-5da7df0ab7de"}
         //     }
         // )
-            api.createTodolist(newTodolistName)
-            .then(response => {
-                if (response.data.resultCode === 0) {
-                    // debugger
-                    this.props.addTodoList(response.data.data.item)
-                }
-            })
-        // let newTodoList = {
-        //     title: newTodolistName, id: this.props.todolists.length,
-        //     tasks: []
-        // };
-        //
-        // this.nextTodoListId++;
-        // this.props.addTodoList(newTodoList)
+        //     api.createTodolist(newTodolistName)
+        //     .then(response => {
+        //         if (response.data.resultCode === 0) {
+        //             // debugger
+        //             this.props.addTodoList(response.data.data.item)
+        //         }
+        //     })
     }
 
 
@@ -96,6 +91,7 @@ class App extends React.Component {
         })
         return (
             <>
+                <Preloader isPreloader={this.props.isPreloaderTodo}/>
                 <div>
                     <AddNewItemForm addItem={this.addTodoList}/>
                 </div>
@@ -112,19 +108,29 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        todolists: state.todolists
+        todolists: state.todolists,
+        isPreloaderTodo: state.isPreloaderTodo
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        // addTodoList: (newTodolistName) => {
+        //     const action = addTodoListAC(newTodolistName)
+        //     dispatch(action)
+        // },
+
         addTodoList: (newTodolistName) => {
-            const action = addTodoListAC(newTodolistName)
-            dispatch(action)
+            const thunk = addTodoListTC(newTodolistName)
+            dispatch(thunk)
         },
-        setTodolists: (todolists) => {
-            // debugger
-            dispatch(setTodoListsAC(todolists))
+        // setTodolists: (todolists) => {
+        //     // debugger
+        //     dispatch(setTodoListsAC(todolists))
+        // },
+        getTodolists: () => {
+            const thunk = getTodolistsTC()
+            dispatch(thunk)
         }
     }
 }
