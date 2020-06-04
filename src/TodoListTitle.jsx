@@ -29,7 +29,6 @@ class TodoListTitle extends React.Component {
         })
     }
 
-
     render = () => {
         // let classNameInput = this.state.error ? "error" : "";
         return (

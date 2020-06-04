@@ -45,14 +45,11 @@ export const reducer = (state = initialState, action) => {
     let newTodolists;
     switch (action.type) {
 
-///////////////+++++++++
         case SET_TODOLISTS:
-            // debugger
             return {...state, todolists: action.todolists}
 
 
         case ADD_TODOLIST:
-            debugger
 
             newTodolists = [action.newTodolistName, ...state.todolists]
             return {...state, todolists: newTodolists}
@@ -68,10 +65,7 @@ export const reducer = (state = initialState, action) => {
                 todolists: arrTodoAfterDel
             }
 
-
-///////////////////++++++++++
         case SET_TASKS:
-            debugger
             let q = {
                 ...state,
                 todolists: state.todolists.map(todo => {
@@ -85,15 +79,12 @@ export const reducer = (state = initialState, action) => {
             console.log(q)
             return q;
 
-
-///////////////////++++++++++
         case ADD_TASK:
-            debugger
             newTodolists = state.todolists.map(todo => {
                 if (todo.id !== action.todolistId) {
                     return todo
                 } else {
-                    return {...todo, tasks: [...todo.tasks, action.newTask]}
+                    return {...todo, tasks: [action.newTask, ...todo.tasks]}
                 }
             })
             return {...state, todolists: newTodolists}
@@ -116,21 +107,16 @@ export const reducer = (state = initialState, action) => {
                     }
                 }
             })
-            // debugger
             return {...state, todolists: newTodolists}
 
 
         case DELETE_TASK:
             newTodolists = state.todolists.map(todo => {
-                debugger
                 if (todo.id !== action.todolistId) {
                     return todo
                 } else {
                     let arrTasksAfterDel = [...todo.tasks.filter(taska => taska.id !== action.taskId
                     )];
-                    // arrTasksAfterDel = arrTasksAfterDel.map((t, i) => {
-                    //     return {...t, id: i}
-                    // })
                     return {
                         ...todo, tasks: arrTasksAfterDel
                     }
@@ -139,7 +125,6 @@ export const reducer = (state = initialState, action) => {
             return {...state, todolists: newTodolists}
 
         case CHANGE_TODOLIST:
-            debugger
             newTodolists = state.todolists.map(todo => {
                 if (todo.id !== action.todolistId) {
                     return todo
@@ -198,7 +183,6 @@ export const changeTodolistAC = (todoId, newtitle) => {
     )
 }
 
-
 export const deleteTaskAC = (todolistId, taskId) => {
     return (
         {
@@ -208,7 +192,6 @@ export const deleteTaskAC = (todolistId, taskId) => {
         }
     )
 }
-
 
 export const setTodoListsAC = (todolists) => {
     return (
@@ -230,7 +213,8 @@ export const setTasksAC = (tasks, todoListId) => {
 }
 
 /////THUNKS
-export const getTodolistsTC = () => {
+////from APP
+export const getTodolists = () => {
     return (dispatch) => {
         dispatch(changePreloaderTodoAC(true))
         api.getTodolists()
@@ -242,34 +226,20 @@ export const getTodolistsTC = () => {
     }
 }
 
-export const addTodoListTC = (newTodolistName) => {
+
+export const addTodoList = (newTodolistName) => {
     return (dispatch) => {
         api.createTodolist(newTodolistName)
             .then(response => {
                 if (response.data.resultCode === 0) {
-                    // debugger
                     dispatch(addTodoListAC(response.data.data.item))
                 }
             })
     }
 }
 
-export const getTasksTC = (todoListId) => {
-    return (dispatch) => {
-        dispatch(changePreloaderTasksAC(true))
-        api.getTasks(todoListId)
-            .then(response => {
-                console.log(response)
-                // debugger
-                if (!response.data.error) {
-                    dispatch(setTasksAC(response.data.items, todoListId))
-                    dispatch(changePreloaderTasksAC(false))
-                }
-            })
-    }
-}
-
-export const deleteTodolistTC = (todoListId) => {
+////from TodoList
+export const deleteTodolist = (todoListId) => {
     return (dispatch) => {
         api.deleteTodolist(todoListId)
             .then(response => {
@@ -281,32 +251,7 @@ export const deleteTodolistTC = (todoListId) => {
     }
 }
 
-export const addTaskTC = (todoListId, newText) => {
-    return (dispatch) => {
-        api.createTask(todoListId, newText)
-            .then(response => {
-                debugger
-                if (response.data.resultCode === 0) {
-                    let newTask = response.data.data.item;
-                    dispatch(addTaskAC(todoListId, newTask))
-                }
-            })
-    }
-}
-
-export const deleteTaskTC = (todoListId, taskId) => {
-    return (dispatch) => {
-        api.deleteTask(todoListId, taskId)
-            .then(response => {
-                // debugger
-                if (response.data.resultCode === 0) {
-                    dispatch(deleteTaskAC(todoListId, taskId))
-                }
-            })
-    }
-}
-
-export const changeTodolistTC = (todoListId, newtitle) => {
+export const changeTodolist = (todoListId, newtitle) => {
     return (dispatch) => {
         api.changeTodoTitle(todoListId, newtitle)
             .then(
@@ -315,7 +260,46 @@ export const changeTodolistTC = (todoListId, newtitle) => {
     }
 }
 
-export const changeTaskTC = (task, newPropsObj) => {
+export const getTasks = (todoListId) => {
+    return (dispatch) => {
+        dispatch(changePreloaderTasksAC(true))
+        api.getTasks(todoListId)
+            .then(response => {
+                console.log(response)
+                if (!response.data.error) {
+                    dispatch(setTasksAC(response.data.items, todoListId))
+                    dispatch(changePreloaderTasksAC(false))
+                }
+            })
+    }
+}
+
+
+export const addTask = (todoListId, newText) => {
+    return (dispatch) => {
+        api.createTask(todoListId, newText)
+            .then(response => {
+                if (response.data.resultCode === 0) {
+                    let newTask = response.data.data.item;
+                    dispatch(addTaskAC(todoListId, newTask))
+                }
+            })
+    }
+}
+
+export const deleteTask = (todoListId, taskId) => {
+    return (dispatch) => {
+        api.deleteTask(todoListId, taskId)
+            .then(response => {
+                if (response.data.resultCode === 0) {
+                    dispatch(deleteTaskAC(todoListId, taskId))
+                }
+            })
+    }
+}
+
+
+export const changeTask = (task, newPropsObj) => {
     return (dispatch) => {
         api.changeTask(task, newPropsObj)
             .then(response => {

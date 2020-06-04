@@ -48,8 +48,6 @@ const api = {
             {title:newtitle}
         )
     }
-
-
 }
 
 export default api;

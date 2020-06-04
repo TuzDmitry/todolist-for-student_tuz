@@ -4,12 +4,8 @@ import PropTypes from 'prop-types';
 class TodoListTask extends React.Component {
 
     onIsDoneChanged = (e) => {
-
         let status = e.currentTarget.checked ? 2 : 0
-
         this.props.changeStatus(this.props.task, status)
-// debugger
-        // alert(e.currentTarget.checked);
     }
 
     onTitleChanged = (e) => {
@@ -20,7 +16,6 @@ class TodoListTask extends React.Component {
 
     onClickClose = () => {
         this.props.deleteTask(this.props.task.id)
-        // alert('hey')
     }
 
     state = {
@@ -35,7 +30,6 @@ class TodoListTask extends React.Component {
         })
     }
     deActivateEditMode = () => {
-        // debugger
         this.props.changeTitle(this.props.task, this.state.memoryTitle)
         this.setState({
             editMode: false
@@ -75,7 +69,7 @@ class TodoListTask extends React.Component {
             <div>
                 <div className="taskContainer">
                     <div className={classForIsDone}>
-                        <span>{this.props.task.id.slice(0,4)}</span>
+                        <span>{this.props.task.id.slice(0, 4)}</span>
                         <input type="checkbox" onChange={this.onIsDoneChanged} checked={statusTasks === 2}/>
 
                         {/*<div>{this.props.task.id}</div>*/}
@@ -91,14 +85,14 @@ class TodoListTask extends React.Component {
                         <span>priority:
                             {
                                 this.state.editPriorityMode
-                                    ? <select size="1"
+                                    ? <select autoFocus={true} size="1"
                                               onBlur={() => this.setState({editPriorityMode: false})}
                                               onChange={this.onPriorityChanged}>
-                                        <option>low</option>
-                                        <option>medium</option>
-                                        <option>hi</option>
-                                        <option>urgently</option>
-                                        <option>later</option>
+                                        <option selected={priora === 'low'}>low</option>
+                                        <option selected={priora === 'medium'}>medium</option>
+                                        <option selected={priora === 'hi'}>hi</option>
+                                        <option selected={priora === 'urgently'}>urgently</option>
+                                        <option selected={priora === 'later'}>later</option>
                                     </select>
 
                                     : <span onClick={() => this.setState({editPriorityMode: true})}>
