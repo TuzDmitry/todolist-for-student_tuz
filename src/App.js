@@ -65,21 +65,23 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addTodoList: (newTodolistName) => {
-            const thunk = addTodoList(newTodolistName)
-            dispatch(thunk)
-        },
-        getTodolists: () => {
-            const thunk = getTodolists()
-            dispatch(thunk)
-        }
-    }
-}
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         addTodoList: (newTodolistName) => {
+//             const thunk = addTodoList(newTodolistName)
+//             dispatch(thunk)
+//         },
+//         getTodolists: () => {
+//             const thunk = getTodolists()
+//             dispatch(thunk)
+//         }
+//     }
+// }
+
+// const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
 
 
-const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
+const ConnectedApp = connect(mapStateToProps, {addTodoList, getTodolists})(App);
 
 export default ConnectedApp;
 

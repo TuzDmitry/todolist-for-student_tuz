@@ -45,7 +45,7 @@ class TodoList extends React.Component {
 
     changeTodoTitle = (todoListId, newtitle) => {
         // вызов колбека который нам предоставил connect для вызова санки
-        this.props.changeTodoTitle(todoListId, newtitle)
+        this.props.changeTodolist(todoListId, newtitle)
     }
 
     addTask = (newText) => {
@@ -169,39 +169,44 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        deleteTodolist: (todoListId) => {
-            const thunk = deleteTodolist(todoListId)
-            dispatch(thunk)
-        },
-        changeTodoTitle: (todoListId, newtitle) => {
-            const thunk = changeTodolist(todoListId, newtitle)
-            dispatch(thunk)
-        },
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         deleteTodolist: (todoListId) => {
+//             const thunk = deleteTodolist(todoListId)
+//             dispatch(thunk)
+//         },
+//         changeTodolist: (todoListId, newtitle) => {
+//             const thunk = changeTodolist(todoListId, newtitle)
+//             dispatch(thunk)
+//         },
+//
+//
+//
+//         getTasks: (todoListId) => {
+//             const thunk=getTasks(todoListId)
+//             dispatch(thunk)
+//         },
+//         addTask: (todoListId, newText) => {
+//             const thunk = addTask(todoListId, newText)
+//             dispatch(thunk)
+//         },
+//         deleteTask: (todoListId, taskId) => {
+//             const thunk = deleteTask(todoListId, taskId)
+//             dispatch(thunk)
+//         },
+//         changeTask: (task, newPropsObj) => {
+//             const thunk = changeTask(task, newPropsObj)
+//             dispatch(thunk)
+//         }
+//     }
+// }
 
+// const TodolistConnect = connect(mapStateToProps, mapDispatchToProps)(TodoList)
 
-
-        getTasks: (todoListId) => {
-            const thunk=getTasks(todoListId)
-            dispatch(thunk)
-        },
-        addTask: (todoListId, newText) => {
-            const thunk = addTask(todoListId, newText)
-            dispatch(thunk)
-        },
-        deleteTask: (todoListId, taskId) => {
-            const thunk = deleteTask(todoListId, taskId)
-            dispatch(thunk)
-        },
-        changeTask: (task, newPropsObj) => {
-            const thunk = changeTask(task, newPropsObj)
-            dispatch(thunk)
-        }
-    }
-}
-
-const TodolistConnect = connect(mapStateToProps, mapDispatchToProps)(TodoList)
+const TodolistConnect = connect(mapStateToProps,
+    {deleteTodolist,changeTodolist,
+        getTasks,addTask, deleteTask,changeTask}
+        )(TodoList)
 
 export default TodolistConnect;
 // export default TodoList;
